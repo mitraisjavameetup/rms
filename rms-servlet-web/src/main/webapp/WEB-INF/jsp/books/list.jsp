@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <rms:link type="stylesheet" href="css/styles.css?v=1.0"/>
+    <rms:link type="stylesheet" href="css/styles.css?v=1.0"/>
 
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -30,19 +30,21 @@
             <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
                 <thead>
                     <tr>
-                        <th class="mdl-data-table__cell--non-numeric">User Name</th>
-                        <th>Password</th>
+                        <th class="mdl-data-table__cell--non-numeric">Title</th>
+                        <th>Author</th>
+                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                <c:forEach items = "${users}" var="user">
+                <c:forEach items = "${books}" var="books">
                     <tr>
-                        <td class="mdl-data-table__cell--non-numeric"><c:out value = "${user.getUserName()}"/></td>
-                        <td><c:out value = "${user.getPassword()}"/></td>
+                        <td class="mdl-data-table__cell--non-numeric"><c:out value = "${books.getTitle()}"/></td>
+                        <td><c:out value = "${books.getAuthor()}"/></td>
+                        <td><c:out value = "${books.getPrice()}"/></td>
                         <td>
-                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href='edit?id=<c:out value = "${user.getId()}"/>'><i class="material-icons">create</i>Edit</a>
-                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent delete-row" href='delete?id=<c:out value = "${user.getId()}"/>'><i class="material-icons">clear</i>Delete</a>
+                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href='edit?id=<c:out value = "${books.getBookId()}"/>'><i class="material-icons">create</i>Edit</a>
+                            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent delete-row" href='delete?id=<c:out value = "${books.getBookId()}"/>'><i class="material-icons">clear</i>Delete</a>
                         </td> 
                     </tr>
                 </c:forEach>
@@ -52,7 +54,7 @@
     </div>
 
     <script>
-        $(document).ready(function () {            
+        $(document).ready(function () {
             $(".delete-row").click(function () {
                 var r = confirm("Are you sure, want to delete this data!");
                 if (r == true) {
