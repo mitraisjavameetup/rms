@@ -31,6 +31,16 @@ INSERT INTO `user` (`id`, `user_name`, `password`) VALUES
 	(2, 'John', '12345');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
+CREATE TABLE `book` (
+  `book_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL,
+  `author` varchar(45) NOT NULL,
+  `price` float NOT NULL,
+  PRIMARY KEY (`book_id`),
+  UNIQUE KEY `book_id_UNIQUE` (`book_id`),
+  UNIQUE KEY `title_UNIQUE` (`title`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
