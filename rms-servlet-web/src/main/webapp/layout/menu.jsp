@@ -6,19 +6,19 @@
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation -->
         <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="users/list">Users</a>
-            <a class="mdl-navigation__link" href="books">Books</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="/rms-servlet-web/">Home</a>
+            <a class="mdl-navigation__link" href="/rms-servlet-web/users/list">Users</a>
+            <a class="mdl-navigation__link" href="/rms-servlet-web/books/list">Books</a>
+            <a class="mdl-navigation__link" href="/rms-servlet-web/logout">Logout</a>
         </nav>
     </div>
 </header>
 <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">RMS</span>
     <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="users/list">Users</a>
-        <a class="mdl-navigation__link" href="books">Books</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="/rms-servlet-web/">Home</a>
+        <a class="mdl-navigation__link" href="/rms-servlet-web/users/list">Users</a>
+        <a class="mdl-navigation__link" href="/rms-servlet-web/books/list">Books</a>
+        <a class="mdl-navigation__link" href="/rms-servlet-web/logout">Logout</a>
     </nav>
 </div>

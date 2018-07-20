@@ -56,7 +56,7 @@
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit"><i class="material-icons">create</i>Save</button>
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="list"><i class="material-icons">redo</i>Back</a>
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="/rms-servlet-web/users/list"><i class="material-icons">redo</i>Back</a>
                 </div>
                 </form>
             </div>

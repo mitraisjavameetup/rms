@@ -32,6 +32,7 @@
                     <tr>
                         <th class="mdl-data-table__cell--non-numeric">User Name</th>
                         <th>Password</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
