@@ -6,3 +6,10 @@
 # Maven
 log/
 target/
+
+# eclipse
+.project
+.settings/
+rms-servlet-web/.classpath
+rms-servlet-web/.project
+rms-servlet-web/.settings/
