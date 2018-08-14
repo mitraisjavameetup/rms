@@ -25,7 +25,7 @@ public class SqliteConnection implements DatabaseConnection {
 	}
 
 	public Connection getConnection() throws SQLException {
-		if (connection == null) {
+		if (connection == null || connection.isClosed()) {
 			connection = this.dataSource.getConnection();
 		}
 

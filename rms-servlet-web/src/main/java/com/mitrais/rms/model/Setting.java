@@ -6,7 +6,7 @@ public class Setting {
 	
 	public Setting(String propertyName, String value) {
 		this.setPropertyName(propertyName);
-		this.setValue(propertyName);
+		this.setValue(value);
 	}
 	
 	public void setPropertyName(String propertyName) {

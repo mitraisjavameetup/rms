@@ -8,20 +8,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/login")
-public class LoginServlet extends AbstractController
-{
+public class LoginServlet extends AbstractController {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
-        String path = getTemplatePath(req.getServletPath());
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);
-        requestDispatcher.forward(req, resp);
-    }
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
+			throws ServletException, IOException {
+		
+		String path = getTemplatePath(req.getServletPath());
+		RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);
+		requestDispatcher.forward(req, resp);
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
-        super.doPost(req, resp);
-    }
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
+			throws ServletException, IOException {
+		
+		super.doPost(req, resp);
+	}
 }

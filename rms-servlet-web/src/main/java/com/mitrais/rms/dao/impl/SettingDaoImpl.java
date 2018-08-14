@@ -15,7 +15,7 @@ import com.mitrais.rms.dao.*;
 import com.mitrais.rms.model.Setting;
 
 public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
-	
+
 	@Inject
 	public SettingDaoImpl(DatabaseConnection databaseConnection) {
 		super(databaseConnection);
@@ -24,10 +24,10 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 	@Override
 	public Optional<Setting> find(String id) {
 
-		try (Connection connection = databaseConnection.getConnection()) {
-
+		try {
+			Connection connection = databaseConnection.getConnection();
 			PreparedStatement statement = connection.prepareStatement(
-					"SELECT PROPERTY_NAME, VALUE FROM SETTING " + "WHERE DELETED = 0 AND PROPERTY_NAME = ?");
+					"SELECT PROPERTY_NAME, VALUE FROM SETTING WHERE DELETED = 0 AND PROPERTY_NAME = ?");
 			statement.setString(1, id);
 
 			ResultSet resultSet = statement.executeQuery();
@@ -74,7 +74,8 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 	public boolean save(Setting setting) {
 		Optional<Setting> existingSetting = this.find(setting.getPropertyName());
 
-		try (Connection connection = databaseConnection.getConnection()) {
+		try {
+			Connection connection = databaseConnection.getConnection();
 			PreparedStatement preparedStatement;
 
 			if (existingSetting.isPresent()) {
@@ -100,7 +101,8 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 	@Override
 	public boolean delete(Setting setting) {
 
-		try (Connection connection = databaseConnection.getConnection()) {
+		try {
+			Connection connection = databaseConnection.getConnection();
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("UPDATE SETTING SET DELETED = 1 WHERE PROPERTY_NAME = ?");
 			preparedStatement.setString(1, setting.getPropertyName());
@@ -122,6 +124,7 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 		if (setting.isPresent()) {
 			try {
 				String value = setting.get().getValue();
+				System.out.println(value);
 				result = Optional.of(Integer.parseInt(value));
 			} catch (NumberFormatException e) {
 				// TODO: should put this output to logger instead

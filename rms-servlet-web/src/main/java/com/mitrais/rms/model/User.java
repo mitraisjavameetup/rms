@@ -6,6 +6,13 @@ public class User
     private String userName;
     private String password;
 
+    public User() {
+    	this.id = (long) 0;
+    	this.userName = "";
+    	this.password = "";
+    }
+    
+    
     public User(Long id, String userName, String password) {
         this.id = id;
         this.userName = userName;
@@ -15,6 +22,10 @@ public class User
     public Long getId() {
         return id;
     }
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
 
     public String getUserName() {
         return userName;
