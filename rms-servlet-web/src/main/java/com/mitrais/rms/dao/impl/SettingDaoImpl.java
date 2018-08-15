@@ -51,7 +51,8 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 	public List<Setting> findAll() {
 		List<Setting> result = new ArrayList<>();
 
-		try (Connection connection = databaseConnection.getConnection()) {
+		try {
+			Connection connection = databaseConnection.getConnection();
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement
 					.executeQuery("SELECT PROPERTY_NAME, VALUE FROM SETTING " + "WHERE DELETED = 0");
@@ -82,7 +83,7 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 				preparedStatement = connection.prepareStatement("UPDATE SETTING SET VALUE = ? WHERE PROPERTY_NAME = ?");
 			} else {
 				preparedStatement = connection
-						.prepareStatement("INSERT INTO SETTING (VALUE, PROPERTY_NAME) VALUES (?, ?)");
+						.prepareStatement("INSERT INTO SETTING (VALUE, PROPERTY_NAME, DELETED) VALUES (?, ?, 0)");
 			}
 			preparedStatement.setString(1, setting.getValue());
 			preparedStatement.setString(2, setting.getPropertyName());
@@ -124,7 +125,6 @@ public class SettingDaoImpl extends BaseDaoImpl implements SettingDao {
 		if (setting.isPresent()) {
 			try {
 				String value = setting.get().getValue();
-				System.out.println(value);
 				result = Optional.of(Integer.parseInt(value));
 			} catch (NumberFormatException e) {
 				// TODO: should put this output to logger instead

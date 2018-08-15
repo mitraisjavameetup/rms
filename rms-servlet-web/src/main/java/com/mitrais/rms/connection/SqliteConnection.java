@@ -15,12 +15,20 @@ public class SqliteConnection implements DatabaseConnection {
 	private Connection connection;
 
 	public SqliteConnection() {
+		this(false);
+	}
+
+	public SqliteConnection(boolean isForTest) {
 		// TODO Auto-generated constructor stub
 		SQLiteDataSource dataSource = new SQLiteDataSource();
 
-		// sqlite path
-		Path sbFilePath = Paths.get(new File("").getAbsolutePath().toString(), "\\src\\main\\sqlite", "rmsdb.db");
-		dataSource.setUrl("jdbc:sqlite://" + sbFilePath.toAbsolutePath());
+		if (isForTest) {
+			dataSource.setUrl("jdbc:sqlite:");
+		} else {
+			// sqlite path
+			Path sbFilePath = Paths.get(new File("").getAbsolutePath().toString(), "\\src\\main\\sqlite", "rmsdb.db");
+			dataSource.setUrl("jdbc:sqlite://" + sbFilePath.toAbsolutePath());
+		}
 		this.dataSource = dataSource;
 	}
 

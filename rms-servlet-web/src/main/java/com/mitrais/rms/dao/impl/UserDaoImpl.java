@@ -29,7 +29,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 	public Optional<User> find(Long id) {
 		try {
 			Connection connection = databaseConnection.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM USER WHERE id=?");
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM USER WHERE ID=? AND DELETED = 0");
 			preparedStatement.setLong(1, id);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
