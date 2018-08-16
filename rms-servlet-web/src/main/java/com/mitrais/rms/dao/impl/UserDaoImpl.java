@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.omg.IOP.ExceptionDetailMessage;
-
 import com.google.inject.Inject;
 import com.mitrais.rms.connection.DatabaseConnection;
 import com.mitrais.rms.dao.SettingDao;
@@ -34,8 +32,11 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				User user = new User(resultSet.getLong("ID"), resultSet.getString("USERNAME"),
-						resultSet.getString("PASSWORD"));
+				User user = new User(
+						resultSet.getLong("ID"), 
+						resultSet.getString("USERNAME"),
+						resultSet.getString("PASSWORD"),
+						resultSet.getTimestamp("LAST_LOGIN"));
 				return Optional.of(user);
 			}
 
@@ -57,8 +58,11 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM USER WHERE DELETED = 0");
 			while (resultSet.next()) {
-				User user = new User(resultSet.getLong("ID"), resultSet.getString("USERNAME"),
-						resultSet.getString("PASSWORD"));
+				User user = new User(
+						resultSet.getLong("ID"), 
+						resultSet.getString("USERNAME"),
+						resultSet.getString("PASSWORD"),
+						resultSet.getTimestamp("LAST_LOGIN"));
 				result.add(user);
 			}
 
@@ -138,15 +142,24 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
 		existingUser = optExistingUser.get();
 		existingUser.setUserName(user.getUserName());
+		
+		// Update password if requested
 		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
 			existingUser.setPassword(user.getPassword());
 		}
+		
+		// update last login if requested
+		if (user.getLastLogin() != null) {
+			existingUser.setLastLogin(user.getLastLogin());
+		}
 
 		PreparedStatement userUpdateStatement = connection
-				.prepareStatement("UPDATE USER SET USERNAME = ?, PASSWORD = ? WHERE ID = ? AND DELETED = 0");
+				.prepareStatement("UPDATE USER SET USERNAME = ?, PASSWORD = ?, LAST_LOGIN = ? WHERE ID = ? AND DELETED = 0");
 		userUpdateStatement.setString(1, existingUser.getUserName());
 		userUpdateStatement.setString(2, existingUser.getPassword());
-		userUpdateStatement.setLong(3, existingUser.getId());
+		userUpdateStatement.setTimestamp(3, existingUser.getLastLogin());
+		userUpdateStatement.setLong(4, existingUser.getId());
+		
 		i = userUpdateStatement.executeUpdate();
 
 		userUpdateStatement.close();

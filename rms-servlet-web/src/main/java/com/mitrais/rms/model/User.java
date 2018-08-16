@@ -1,22 +1,30 @@
 package com.mitrais.rms.model;
 
+import java.sql.Timestamp;
+
 public class User
 {
-    private Long id;
-    private String userName;
-    private String password;
-
-    public User() {
-    	this.id = (long) 0;
-    	this.userName = "";
-    	this.password = "";
-    }
+    private Long id = (long) 0;
+    private String userName = "";
+    private String password = "";
+    private Timestamp lastLogin;
+    
+    
+    public User() {}
     
     
     public User(Long id, String userName, String password) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
+        this.setId(id);
+        this.setUserName(userName);
+        this.setPassword(password);
+    }
+
+
+	public User(Long id, String userName, String password, Timestamp lastLoginStamp) {
+        this.setId(id);
+        this.setUserName(userName);
+        this.setPassword(password);
+        this.setLastLogin(lastLoginStamp);
     }
 
     public Long getId() {
@@ -42,4 +50,12 @@ public class User
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public Timestamp getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Timestamp lastLoginStamp) {
+		this.lastLogin = lastLoginStamp;
+	}
 }

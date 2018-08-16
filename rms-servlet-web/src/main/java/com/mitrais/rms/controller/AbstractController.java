@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import javax.servlet.http.HttpServlet;
 
 public abstract class AbstractController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
 	public static final String VIEW_PREFIX = "/WEB-INF/jsp";
 	public static final String VIEW_SUFFIX = ".jsp";
 

@@ -26,7 +26,8 @@ public class SqliteConnection implements DatabaseConnection {
 			dataSource.setUrl("jdbc:sqlite:");
 		} else {
 			// sqlite path
-			Path sbFilePath = Paths.get(new File("").getAbsolutePath().toString(), "\\src\\main\\sqlite", "rmsdb.db");
+			String mainAppPath = new File("").getAbsolutePath().toString().replaceFirst("rms-servlet-web", "");
+			Path sbFilePath = Paths.get(mainAppPath, "\\src\\main\\sqlite", "rmsdb.db");
 			dataSource.setUrl("jdbc:sqlite://" + sbFilePath.toAbsolutePath());
 		}
 		this.dataSource = dataSource;
