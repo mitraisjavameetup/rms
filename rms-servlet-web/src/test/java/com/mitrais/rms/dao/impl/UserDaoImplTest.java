@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +43,16 @@ public class UserDaoImplTest {
 					+ "	ID BIGINT PRIMARY KEY NOT NULL, "
 					+ "	USERNAME VARCHAR(100) NOT NULL, " 
 					+ "	PASSWORD VARCHAR(100) NOT NULL, "
+					+ "	LAST_LOGIN DATETIME NULL, "
 					+ "	DELETED BIT NOT NULL DEFAULT 0);";			
-			String insertUserQuery = "INSERT INTO USER VALUES (1, 'ADMIN_RMS', 'ADMIN', 0);";
+			
+			String insertUserQuery = "INSERT INTO USER (ID, USERNAME, PASSWORD, DELETED) VALUES (1, 'admin_rms', 'admin', 0);";
+			
 			String createSettingQuery = "CREATE TABLE IF NOT EXISTS \"SETTING\" (" 
 					+ "	PROPERTY_NAME VARCHAR(100) PRIMARY KEY NOT NULL, "
 					+ "	VALUE VARCHAR(250) NULL, " 
 					+ "	DELETED BIT DEFAULT O NOT NULL);";
+			
 			String insertSettingQuery = "INSERT INTO SETTING VALUES ('MAX_USER_ID', 1, 0);	";
 
 			PreparedStatement createUserStatement = connection.prepareStatement(createUserQuery);
@@ -139,8 +144,8 @@ public class UserDaoImplTest {
 		
 		assertTrue(user.isPresent());
 		assertEquals(id, user.get().getId());
-		assertEquals("ADMIN_RMS", user.get().getUserName());
-		assertEquals("ADMIN", user.get().getPassword());
+		assertEquals("admin_rms", user.get().getUserName());
+		assertEquals("admin", user.get().getPassword());
 	}
 	
 	@Test
@@ -162,7 +167,7 @@ public class UserDaoImplTest {
 		assertTrue(saveUser);
 		
 		List<User> allUsers = userDao.findAll();
-		assertEquals(2, allUsers.size());
+		assertEquals(id.longValue(), (long) allUsers.size());
 		
 		Optional<User> savedUser = userDao.find(id);
 		assertTrue(savedUser.isPresent());
@@ -226,7 +231,7 @@ public class UserDaoImplTest {
 	}
 	
 	@Test
-	public void deleteUserPositive() {
+	public void testDeleteUserPositive() {
 		Long id = (long) 1;
 		
 		User user = new User(id, "", "");
@@ -241,7 +246,7 @@ public class UserDaoImplTest {
 	}
 	
 	@Test
-	public void deleteUserNotDefinedId() {
+	public void testDeleteUserNotDefinedId() {
 		Long id = (long) -1;
 		
 		User user = new User(id, "", "");
@@ -251,4 +256,54 @@ public class UserDaoImplTest {
 		List<User> allUsers = userDao.findAll();
 		assertEquals(1, allUsers.size());
 	}
+	
+	@Test
+	public void testBulkAddUserPositive() {
+		Long id = (long) 11;
+		List<User> users = new ArrayList<>();
+		
+		for (int i = 0; i < 10; i++) {
+			User currentUser = new User();
+			currentUser.setUserName("testBulkInsert" + i);
+			currentUser.setPassword("user");
+			users.add(currentUser);
+		}
+
+		boolean saveUser = userDao.BulkAddUsers(users);
+		assertTrue(saveUser);
+		
+		List<User> allUsers = userDao.findAll();
+		assertEquals(id.longValue(), (long) allUsers.size());
+		
+		Optional<User> savedUser = userDao.find(id);
+		assertTrue(savedUser.isPresent());
+		assertEquals("testBulkInsert9", savedUser.get().getUserName());
+		assertEquals("user", savedUser.get().getPassword());
+		
+		Optional<Setting> updatedSetting = settingDao.find("MAX_USER_ID");
+		assertTrue(updatedSetting.isPresent());
+		assertEquals(savedUser.get().getId().toString(), updatedSetting.get().getValue());
+	}
+	
+	@Test
+	public void testBulkAddUserWithEmptyList() {
+		Long id = (long) 1;
+		List<User> users = new ArrayList<>();
+
+		boolean saveUser = userDao.BulkAddUsers(users);
+		assertFalse(saveUser);
+		
+		List<User> allUsers = userDao.findAll();
+		assertEquals(id.longValue(), (long) allUsers.size());
+		
+		Optional<User> savedUser = userDao.find(id);
+		assertTrue(savedUser.isPresent());
+		assertEquals("admin_rms", savedUser.get().getUserName());
+		assertEquals("admin", savedUser.get().getPassword());
+		
+		Optional<Setting> updatedSetting = settingDao.find("MAX_USER_ID");
+		assertTrue(updatedSetting.isPresent());
+		assertEquals(savedUser.get().getId().toString(), updatedSetting.get().getValue());
+	}
+	
 }

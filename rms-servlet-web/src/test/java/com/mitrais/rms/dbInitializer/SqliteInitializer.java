@@ -29,6 +29,7 @@ import com.mitrais.rms.model.Setting;
  * @author Astri_A332
  *
  */
+@Ignore
 public class SqliteInitializer {
 	private DatabaseConnection databaseConnection = null;
 	private SettingDao settingDao = null;
@@ -51,7 +52,7 @@ public class SqliteInitializer {
 					+ "	LAST_LOGIN DATETIME NULL, "
 					+ "	DELETED BIT NOT NULL DEFAULT 0);";			
 			
-			String insertUserQuery = "INSERT INTO USER VALUES (1, 'admin_rms', 'admin', 0), "
+			String insertUserQuery = "INSERT INTO USER (ID, USERNAME, PASSWORD, DELETED) VALUES (1, 'admin_rms', 'admin', 0), "
 					+ "(2, 'user', 'user', 0);";
 			
 			String createSettingQuery = "CREATE TABLE IF NOT EXISTS \"SETTING\" (" 
@@ -92,7 +93,6 @@ public class SqliteInitializer {
 	}
 		
 	@Test
-	//@Ignore
 	public void initialize() {
 		List<Setting> settings = settingDao.findAll();
 		assertEquals(1, settings.size());

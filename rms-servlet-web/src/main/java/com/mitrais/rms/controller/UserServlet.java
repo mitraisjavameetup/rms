@@ -57,24 +57,28 @@ public class UserServlet extends AbstractController {
 	}
 	
 	private void doUserDelete(UserDao userDao, String pathInfo, HttpServletRequest request) {
-		User userToDelete = getUserFromRequestedId(userDao, pathInfo);
+		User userToDelete = getIntFromPathInfo(userDao, pathInfo);
 		boolean isDeleted = userDao.delete(userToDelete);
 		
 		String status = isDeleted ? "success" : "fail";
 		request.getSession().setAttribute("statusSession", status); 	
 	}
 
+	private void doAddBulkUser(UserDao userDao, String pathInfo, HttpServletRequest request) {
+		
+	}
+	
 	private RequestDispatcher getFormPage(UserDao userDao, String pathInfo, HttpServletRequest request) {
 		String[] pathParts = pathInfo.split("/");
 		String path = getTemplatePath(request.getServletPath(), pathParts[1]);
 		
-		User result = getUserFromRequestedId(userDao, pathInfo);
+		User result = getIntFromPathInfo(userDao, pathInfo);
 		request.setAttribute("user", result);
 
 		return request.getRequestDispatcher(path);
 	}
 	
-	private User getUserFromRequestedId(UserDao userDao, String pathInfo) {
+	private User getIntFromPathInfo(UserDao userDao, String pathInfo) {
 		String[] pathParts = pathInfo.split("/");
 		Optional<User> user = Optional.empty();
 		User result = null;
@@ -96,7 +100,6 @@ public class UserServlet extends AbstractController {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
