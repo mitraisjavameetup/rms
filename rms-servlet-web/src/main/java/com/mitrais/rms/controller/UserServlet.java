@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +40,10 @@ public class UserServlet extends AbstractController {
 				doUserDelete(userDao, pathInfo, request);
 				response.sendRedirect("/rms-servlet-web/users/");
 				return;
+			} else if (request.getPathInfo().contains("/bulkadd")) {
+				doAddBulkUser(userDao, pathInfo, request);
+				response.sendRedirect("/rms-servlet-web/users/");
+				return;
 			} else {
 				requestDispatcher = getListPage(userDao, request);
 			}
@@ -55,34 +63,47 @@ public class UserServlet extends AbstractController {
 
 		return request.getRequestDispatcher(path);
 	}
-	
+
 	private void doUserDelete(UserDao userDao, String pathInfo, HttpServletRequest request) {
-		User userToDelete = getIntFromPathInfo(userDao, pathInfo);
+		User userToDelete = getUserFromPathInfo(userDao, pathInfo);
 		boolean isDeleted = userDao.delete(userToDelete);
-		
+
 		String status = isDeleted ? "success" : "fail";
-		request.getSession().setAttribute("statusSession", status); 	
+		request.getSession().setAttribute("statusSession", status);
 	}
 
 	private void doAddBulkUser(UserDao userDao, String pathInfo, HttpServletRequest request) {
+		List<User> usersToAdd = new LinkedList<>();
+		String[] nameList = new String[] { "Melisa", "Randi", "Amel", "Rio" };
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");		
 		
+		for (int i = 1; i <= 10; i++) {
+			String name = String.format("%s - %s", nameList[i % 4], LocalDateTime.now().format(formatter));
+			User user = new User((long) 0, name, "user_password");
+			usersToAdd.add(user);
+		}
+
+		boolean isAddSuccess = userDao.BulkAddUsers(usersToAdd);
+
+		String status = isAddSuccess ? "success" : "fail";
+		request.getSession().setAttribute("statusSession", status);
 	}
-	
+
 	private RequestDispatcher getFormPage(UserDao userDao, String pathInfo, HttpServletRequest request) {
 		String[] pathParts = pathInfo.split("/");
 		String path = getTemplatePath(request.getServletPath(), pathParts[1]);
-		
-		User result = getIntFromPathInfo(userDao, pathInfo);
+
+		User result = getUserFromPathInfo(userDao, pathInfo);
 		request.setAttribute("user", result);
 
 		return request.getRequestDispatcher(path);
 	}
-	
-	private User getIntFromPathInfo(UserDao userDao, String pathInfo) {
+
+	private User getUserFromPathInfo(UserDao userDao, String pathInfo) {
 		String[] pathParts = pathInfo.split("/");
 		Optional<User> user = Optional.empty();
 		User result = null;
-		
+
 		if (pathParts.length >= 3) {
 			try {
 				long userId = Long.parseLong(pathParts[2]);
@@ -92,7 +113,7 @@ public class UserServlet extends AbstractController {
 				System.out.println("Failed to convert Id to integer");
 			}
 		}
-		
+
 		result = user.isPresent() ? user.get() : new User();
 		return result;
 	}
@@ -100,25 +121,25 @@ public class UserServlet extends AbstractController {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		long id = Long.parseLong(request.getParameter("id"));
-		
+
 		boolean updated = false;
 		User user = new User(id, username, password);
 		Injector injector = Guice.createInjector(new ControllerModule());
-		
+
 		try (UserDao userDao = injector.getInstance(UserDaoImpl.class)) {
 			updated = userDao.save(user);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		String status = updated ? "success" : "fail";
 		request.setAttribute("status", status);
-		
+
 		// TODO: please repair the page flow after saving either success or fail
 		if (updated) {
 			response.sendRedirect("users/list");
@@ -128,5 +149,5 @@ public class UserServlet extends AbstractController {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
 			requestDispatcher.forward(request, response);
 		}
-	}	
+	}
 }

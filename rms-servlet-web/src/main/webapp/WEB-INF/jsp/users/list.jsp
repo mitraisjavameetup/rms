@@ -58,6 +58,10 @@
 					<td colspan=3 class="mdl-data-table__cell--non-numeric"><a
 						href="form"> &oplus; Add new </a></td>
 				</tr>
+				<tr>
+					<td colspan=3 class="mdl-data-table__cell--non-numeric"><a
+						href="/rms-servlet-web/users/bulkadd" onclick="return confirmBulkAdd()"> &oplus; Add 10 sample users </a></td>
+				</tr>
 			</tbody>
 		</table>
 		</main>
@@ -66,6 +70,10 @@
 		function confirmDelete(username) {
 			return confirm("are you sure want to delete username " + username
 					+ "?");
+		}
+		
+		function confirmBulkAdd() {
+			return confirm("are you sure want to add 10 sample users ?");
 		}
 	</script>
 </body>
