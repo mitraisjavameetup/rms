@@ -10,6 +10,9 @@
     <packaging>war</packaging>
     <name>rms-servlet-web Maven Webapp</name>
     <url>http://maven.apache.org</url>
+    <properties>
+	    <failOnMissingWebXml>false</failOnMissingWebXml>
+	</properties>
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -31,6 +34,15 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+		   <groupId>org.xerial</groupId>
+		   <artifactId>sqlite-jdbc</artifactId>   
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
     </dependencies>
     <build>
         <finalName>rms-servlet-web</finalName>
